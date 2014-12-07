@@ -30,4 +30,4 @@ Run grunt to download bower packages and set up client and run server (and run t
 
 `grunt`
 
-Go to: http://localhost:3000(http://localhost:3000)
+Go to: [http://localhost:3000](http://localhost:3000)
