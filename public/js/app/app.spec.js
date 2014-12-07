@@ -109,12 +109,31 @@ describe('App: ', function() {
         isolateScope = $element.isolateScope();
         isolateScope.isValid = false;
         formCtrl.$submitted = true;
+        isolateScope.codeData.code = '333333';
         isolateScope.$apply();
         expect(errorElem.hasClass('ng-hide')).toEqual(false);
     });
         
+    it('should hide error message when code is invalid', function () {   
+        var errorElem = angular.element($element[0].querySelector('p.error')),
+            inputElem = $element.find('input').eq(0),
+            formCtrl = inputElem.controller('form');
+        isolateScope = $element.isolateScope();
+        isolateScope.isValid = false;
+        formCtrl.$submitted = true;
+        isolateScope.codeData.code = '333333';
+        isolateScope.$apply();
+        expect(errorElem.hasClass('ng-hide')).toEqual(false);
+        isolateScope = $element.isolateScope();
+        isolateScope.isValid = false;
+        formCtrl.$submitted = true;
+        isolateScope.codeData.code = 'hello';
+        isolateScope.$apply();
+        expect(errorElem.hasClass('ng-hide')).toEqual(true);
+    });    
     
-      it('should hide warn message when input is valid', function () {   
+    
+    it('should hide warn message when input is valid', function () {   
         var warnElem = angular.element($element[0].querySelector('p.warn')),
             inputElem = $element.find('input').eq(0),
             formCtrl = inputElem.controller('form');

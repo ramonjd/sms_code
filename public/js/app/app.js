@@ -105,13 +105,11 @@ angular.module('app', [
       
       // restore form
       scope.resetForm = function(){
-        if ((formCtrl.$valid === true && scope.isValid === false) || scope.isValid === true) {
-            input.val('');
+        if ((formCtrl.$submitted === true && scope.isValid === false) || scope.isValid === true) {
             formCtrl.$setPristine();
             formCtrl.$setUntouched();
           } 
       };
-
     }
   };
 }]);
