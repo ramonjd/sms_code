@@ -30,4 +30,4 @@ Run grunt to download bower packages and set up client and run server (and run t
 
 `grunt`
 
-Brower should automatically open to: [http://localhost:3000](http://localhost:3000)
+Browser should automatically open to: [http://localhost:3000](http://localhost:3000)
