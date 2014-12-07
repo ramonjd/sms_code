@@ -12,7 +12,7 @@ Looks elaborate and time-consuming, but it's based on my usual stack so didn't t
 * Jasmine/karma for testing Angular app, and jasmine-node/supertest for the node parts
 * Grunt compiles the jade to angular partials (writing HTML longhand is boring)
 
-Didn't get time to (TO FO):
+Didn't get time to (TO DO):
 * plugin a watching task
 * pump out a dist version
 
