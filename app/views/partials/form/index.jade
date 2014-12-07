@@ -1,0 +1,13 @@
+form(class='reset', role='form', autocomplete='off', name='codeForm', method='post' data-ng-submit='submitForm()')
+  fieldset
+    label(for='codeForm') Code
+    input(id='codeForm', type='text', name='codeInput', autofocus='autofocus', maxlength='6', size='6', data-ng-model='codeData.code', required, data-ng-maxlength='6', data-ng-trim='true', data-ng-pattern='/^[0-9]{6,6}$/', data-ng-focus='resetForm()')
+    button(class='button', type='submit', data-ng-disabled='codeForm.$invalid') Submit
+    div.validate
+      p.error(data-ng-show='codeForm.$submitted && isValid == false') That code didn't work. Please check and try again.
+      p.warn(data-ng-hide='!codeForm.codeInput.$invalid && !codeForm.codeInput.$error.required') Please enter the 6-digit code
+    // just for a laugh  
+    div.success(data-ng-class='{active: codeForm.$submitted && isValid == true}')
+      h2 Seize the day!
+      div
+        button(class='button', type='reset', data-ng-click='resetForm()') Reset
