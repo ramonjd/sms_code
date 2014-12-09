@@ -31,3 +31,5 @@ Run grunt to download bower packages and set up client and run server (and run t
 `grunt`
 
 Browser should automatically open to: [http://localhost:3000](http://localhost:3000)
+
+Hint: refresh the page if grunt open is too fast for express :)
