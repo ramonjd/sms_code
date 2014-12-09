@@ -18,7 +18,7 @@ Didn't get time to (TO DO):
 
 ##Set up
 
-Install jasmine-node test suite and grunt task runner (you will probably have to sudo these commands)
+Install jasmine-node test suite and grunt task runner **(you will probably have to sudo these commands)**
 
 `npm install jasmine-node grunt -g`
 
@@ -31,3 +31,5 @@ Run grunt to download bower packages and set up client and run server (and run t
 `grunt`
 
 Browser should automatically open to: [http://localhost:3000](http://localhost:3000)
+
+Hint: refresh the page if grunt open is too fast for express :)
