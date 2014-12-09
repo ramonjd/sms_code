@@ -1,18 +1,18 @@
 {
-  "name": "code_via_SMS",
+  "name": "sms_code",
   "version": "0.0.1",
-  "description": "code_via_SMS ============",
+  "description": "sms_code ============",
   "scripts": {
     "test": "jasmine-node app/"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ramonjd/code_via_SMS.git"
+    "url": "https://github.com/ramonjd/sms_code.git"
   },
   "author": "",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/ramonjd/code_via_SMS/issues"
+    "url": "https://github.com/ramonjd/sms_code/issues"
   },
   "dependencies": {
     "jade": "~1.8.1",

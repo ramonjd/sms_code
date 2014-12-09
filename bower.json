@@ -1,7 +1,7 @@
 {
-  "name": "code_via_SMS",
+  "name": "sms_code",
   "version": "0.0.1",
-  "homepage": "https://github.com/ramonjd/code_via_SMS",
+  "homepage": "https://github.com/ramonjd/sms_code",
   "authors": [
     "Ramon <ramonjd@gmail.com>"
   ],
