@@ -37,3 +37,16 @@ Hint: refresh the page if grunt open is too fast for express :)
 ##Testing
 
 `*.spec.js` files are found next to source files
+
+First you'll have to build the project
+
+`grunt setup`
+
+Then you can test the client:
+
+`grunt testClient`
+
+Or the backend:
+
+`grunt testServer`
+
