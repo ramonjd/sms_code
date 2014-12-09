@@ -1,4 +1,4 @@
-code_via_SMS
+sms_code
 ============
 
 #Overview
@@ -33,3 +33,7 @@ Run grunt to download bower packages and set up client and run server (and run t
 Browser should automatically open to: [http://localhost:3000](http://localhost:3000)
 
 Hint: refresh the page if grunt open is too fast for express :)
+
+##Testing
+
+`*.spec.js` files are found next to source files
