@@ -43,6 +43,8 @@ angular.module('app', [
   $log.info('  Hint:            ');
   $log.info('  Today\'s date    ');
   $log.info('  ..................  ');
+  
+  
 
   $scope.codeData = {
     code : null,
@@ -72,8 +74,7 @@ angular.module('app', [
 })
 
 
-
-/* FORM DIRECTIVE */
+/* FORM DIRECTIVE - UI */
 
 // now, normally, I'd toss this into its own module and 
 // add it as a dependency to the page controller, but who has time?
@@ -89,16 +90,16 @@ angular.module('app', [
     link: function(scope, element, attrs){
       
       var input = element.find('input').eq(0),
-          formCtrl = input.controller('form'),
-          promise;
+          formCtrl = input.controller('form');
       
       
       // local valid flag so we're not at the mercy of controller whims
       scope.isValid = null;
       
       // only submit on valid input value
+      // why a promise? because we might want to do some UI stuff after the call
        scope.submitForm = function(){
-         promise = scope.checkCode().then(function(){
+         scope.checkCode().then(function(){
            scope.isValid = scope.codeData.isValid;
          });
        };
