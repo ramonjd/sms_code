@@ -15,6 +15,7 @@ describe('App: ', function() {
       createCtrl,
       ctrl,
       resetServiceMock,
+      resetService,
       isolateScope,
       template;
   
@@ -28,8 +29,7 @@ describe('App: ', function() {
       $controller = _$injector_.get('$controller');
       $q = _$injector_.get('$q');
       $log = _$injector_.get('$log');
-      resetServiceMock = jasmine.createSpyObj('resetService', ['password']);
-      resetServiceMock.password.and.returnValue($q.when({status:1}));
+      resetServiceMock = jasmine.createSpyObj('resetService', ['listen']);
       createCtrl = function() {
         return $controller('AppCtrl', {
           '$scope' : $scope,
@@ -40,22 +40,11 @@ describe('App: ', function() {
       };
       ctrl = createCtrl();
     }));
-    
-    it('should have a function checkCode', function(){
-      expect($scope.checkCode).toBeDefined();
-    }); 
-    
+
     it('should have a model codeData', function(){
-      expect($scope.codeData.code).toBe(null);
       expect($scope.codeData.isValid).toBe(null);
     }); 
     
-    it('should call resetService.password()', function(){
-      $scope.codeData.code = '222222';
-      $scope.checkCode();
-      expect(resetServiceMock.password).toHaveBeenCalled();
-      expect(resetServiceMock.password).toHaveBeenCalledWith('222222');
-    }); 
     
   }); 
   
@@ -69,18 +58,13 @@ describe('App: ', function() {
       $httpBackend = _$injector_.get('$httpBackend');
       $scope = _$injector_.get('$rootScope').$new();
       $compile = _$injector_.get('$compile');
+      resetService = _$injector_.get('resetService');
       $q = _$injector_.get('$q');
       $scope.codeData = {
-        code : null,
         isValid : null
       };
-      $scope.checkCode = function(){
-        deferred = $q.defer();
-        deferred.resolve();
-        return deferred.promise;
-      };
       $httpBackend.when('GET', '/views/form.tpl.html').respond({});
-      $element = angular.element('<div reset-form data-code-data="codeData" data-check-code="checkCode()"></div>');
+      $element = angular.element('<div reset-form data-code-data="codeData"></div>');
       template = $compile($element)($scope);
       $scope.$apply();
       $httpBackend.expectGET('/views/form.tpl.html');
@@ -93,12 +77,12 @@ describe('App: ', function() {
       expect(isolateScope.codeData).toBeDefined();
     });
     
-    it('should have submitForm function that calls checkCode()', function () {
+    it('should have submitForm function that calls resetService.password()', function () {
         isolateScope = $element.isolateScope();
-        spyOn(isolateScope, 'checkCode').and.callThrough();
         expect(isolateScope.submitForm).toBeDefined();
+        spyOn(resetService, 'password').and.callThrough();
         isolateScope.submitForm();
-        expect(isolateScope.checkCode).toHaveBeenCalled();
+        expect(resetService.password).toHaveBeenCalled();
     });
     
     it('should show error message when server returns invalid code', function () {   
@@ -107,9 +91,9 @@ describe('App: ', function() {
             formCtrl = inputElem.controller('form');
         expect(errorElem.hasClass('ng-hide')).toEqual(true);
         isolateScope = $element.isolateScope();
-        isolateScope.isValid = false;
+        isolateScope.codeData.isValid = false;
         formCtrl.$submitted = true;
-        isolateScope.codeData.code = '333333';
+        isolateScope.code = '333333';
         isolateScope.$apply();
         expect(errorElem.hasClass('ng-hide')).toEqual(false);
     });
@@ -119,15 +103,15 @@ describe('App: ', function() {
             inputElem = $element.find('input').eq(0),
             formCtrl = inputElem.controller('form');
         isolateScope = $element.isolateScope();
-        isolateScope.isValid = false;
+        isolateScope.codeData.isValid = false;
         formCtrl.$submitted = true;
-        isolateScope.codeData.code = '333333';
+        isolateScope.code = '333333';
         isolateScope.$apply();
         expect(errorElem.hasClass('ng-hide')).toEqual(false);
         isolateScope = $element.isolateScope();
-        isolateScope.isValid = false;
+        isolateScope.codeData.isValid = false;
         formCtrl.$submitted = true;
-        isolateScope.codeData.code = 'hello';
+        isolateScope.code = 'hello';
         isolateScope.$apply();
         expect(errorElem.hasClass('ng-hide')).toEqual(true);
     });    
@@ -140,12 +124,12 @@ describe('App: ', function() {
         
         isolateScope = $element.isolateScope();
         inputElem.val('33');
-        isolateScope.codeData.code = '33';
+        isolateScope.code = '33';
         isolateScope.$apply();
         expect(warnElem.hasClass('ng-hide')).toEqual(false);
         
         inputElem.val('333333');
-        isolateScope.codeData.code = '333333';
+        isolateScope.code = '333333';
         isolateScope.$apply();
         expect(warnElem.hasClass('ng-hide')).toEqual(true);
     });
@@ -157,7 +141,7 @@ describe('App: ', function() {
             formCtrl = inputElem.controller('form');
         expect(successElem.hasClass('active')).toEqual(false);
         isolateScope = $element.isolateScope();
-        isolateScope.isValid = true;
+        isolateScope.codeData.isValid = true;
         formCtrl.$submitted = true;
         isolateScope.$apply();
         expect(successElem.hasClass('active')).toEqual(true);

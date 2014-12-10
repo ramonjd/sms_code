@@ -47,15 +47,12 @@ angular.module('app', [
   
 
   $scope.codeData = {
-    code : null,
     isValid : null
   };
   
-  $scope.checkCode = function(){
-    
-    $log.info('AppCtrl:: code model updated to valid value ' + $scope.codeData.code);
-     return resetService.password($scope.codeData.code).then(function(data){
-       
+  // set up listener
+  resetService.listen($scope, function(data){
+    console.log(data);
         if (angular.isObject(data)) {
           if (data.errorcode) {
             $log.warn('resetPanel:: server returned error');
@@ -67,10 +64,7 @@ angular.module('app', [
             $scope.codeData.isValid = true;
           }  
         }
-       
-     });
-  };
-
+  });
 })
 
 
@@ -79,12 +73,11 @@ angular.module('app', [
 // now, normally, I'd toss this into its own module and 
 // add it as a dependency to the page controller, but who has time?
 
-.directive('resetForm', ['$log', function($log) {
+.directive('resetForm', ['$log', 'resetService', function($log, resetService) {
   return {
     restrict : 'A',
     templateUrl: '/views/form.tpl.html',
     scope : {
-      checkCode:'&',
       codeData: '='
     },
     link: function(scope, element, attrs){
@@ -92,21 +85,17 @@ angular.module('app', [
       var input = element.find('input').eq(0),
           formCtrl = input.controller('form');
       
-      
-      // local valid flag so we're not at the mercy of controller whims
-      scope.isValid = null;
+            scope.code = null;
       
       // only submit on valid input value
       // why a promise? because we might want to do some UI stuff after the call
        scope.submitForm = function(){
-         scope.checkCode().then(function(){
-           scope.isValid = scope.codeData.isValid;
-         });
+         resetService.password(scope.code);
        };
       
       // restore form
       scope.resetForm = function(){
-        if ((formCtrl.$submitted === true && scope.isValid === false) || scope.isValid === true) {
+        if ((formCtrl.$submitted === true && scope.codeData.isValid === false) || scope.codeData.isValid === true) {
             formCtrl.$setPristine();
             formCtrl.$setUntouched();
           } 

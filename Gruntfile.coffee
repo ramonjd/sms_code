@@ -58,10 +58,9 @@ module.exports = (grunt)->
     'copy:dist'
   ]
   grunt.registerTask 'testServer', ['shell:test']
-  grunt.registerTask 'testClient', ['karma']
-  grunt.registerTask 'test', ['testServer', 'testClient']
+  grunt.registerTask 'testClient', ['setup', 'karma']
+  grunt.registerTask 'test', ['karma', 'shell:test']
   grunt.registerTask 'setup', [
-    'shell:bowerinstall',
     'clean:dev',
     'copy:dev',
     'jade:partials'

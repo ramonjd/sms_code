@@ -1,25 +1,38 @@
 angular.module('app.services', [
   'app.constants'
 ]).
-factory('resetService', ['$http', '$q', '$log', 'REST_URLS', function($http, $q, $log, REST_URLS) {
+factory('resetService', ['$http', '$q', '$log', 'REST_URLS', '$rootScope', function($http, $q, $log, REST_URLS, $rootScope) {
   'use strict'; 
   
   /* PRIVATE  */
   
   // only expose data, not what's under the bonnet!
-  var success = function(res){
+  var broadcast = function(msg){
+    $rootScope.$broadcast('reset.password', msg);
+  },
+      
+ success = function(res){
     $log.info('resetService:: $http success');
-    return res.data ;
+    broadcast(res.data);
+    return res.data;
   },
   
   // make a frankenstein error object if need be. it's alive! 
   error = function(res){
       $log.error('resetService:: $http error');
       if (!angular.isObject( res.data ) || !res.data.error) {
+          broadcast('Sweet error message.');
           return $q.reject('Sweet error message.');
         }
+      broadcast(res.data.error);
       return $q.reject(res.data.error);  
-  };
+  },
+      
+  listen = function($scope, callback){
+    $scope.$on('reset.password', function (evt, args) {
+      callback(args);
+    });
+  };  
 
   /* PUBLIC API */
   
@@ -32,11 +45,13 @@ factory('resetService', ['$http', '$q', '$log', 'REST_URLS', function($http, $q,
       },
       url: REST_URLS.reset
     });
-    return req.then(success, error);
+    
+    req.then(success, error);
   }  
   
   return {
-    password: password
+    password: password,
+    listen: listen
   };
   
 }]);
