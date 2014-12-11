@@ -29,7 +29,7 @@ factory('resetService', ['$http', '$q', '$log', 'REST_URLS', '$rootScope', funct
   },
       
   listen = function($scope, callback){
-    $scope.$on('reset.password', function (evt, args) {
+    $rootScope.$on('reset.password', function (evt, args) {
       callback(args);
     });
   };  
@@ -46,7 +46,7 @@ factory('resetService', ['$http', '$q', '$log', 'REST_URLS', '$rootScope', funct
       url: REST_URLS.reset
     });
     
-    req.then(success, error);
+    return req.then(success, error);
   }  
   
   return {

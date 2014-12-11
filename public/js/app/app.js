@@ -52,7 +52,6 @@ angular.module('app', [
   
   // set up listener
   resetService.listen($scope, function(data){
-    console.log(data);
         if (angular.isObject(data)) {
           if (data.errorcode) {
             $log.warn('resetPanel:: server returned error');

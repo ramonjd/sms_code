@@ -8,6 +8,7 @@ describe('App: ', function() {
       $element,
       $compile,
       $scope,
+      $rootScope,
       $httpBackend,
       $q,
       $log,
@@ -25,26 +26,63 @@ describe('App: ', function() {
   describe('App: AppCtrl: ', function() {
 
     beforeEach(inject(function(_$injector_) {
-      $scope = _$injector_.get('$rootScope');
+      $rootScope = _$injector_.get('$rootScope').$new();
+      $scope = _$injector_.get('$rootScope').$new();
       $controller = _$injector_.get('$controller');
       $q = _$injector_.get('$q');
+      $httpBackend = _$injector_.get('$httpBackend');
       $log = _$injector_.get('$log');
-      resetServiceMock = jasmine.createSpyObj('resetService', ['listen']);
+      resetService = _$injector_.get('resetService');
       createCtrl = function() {
         return $controller('AppCtrl', {
           '$scope' : $scope,
-          'resetService' : resetServiceMock,
+          'resetService' : resetService,
           '$log' : $log
           
         });
       };
       ctrl = createCtrl();
+      
     }));
 
     it('should have a model codeData', function(){
       expect($scope.codeData.isValid).toBe(null);
     }); 
     
+    
+    it('should set isValid to true when server returns status', function () {  
+      var obj = {
+        callback : function(data){
+        
+        }
+      };
+      spyOn(obj, 'callback').and.callThrough();
+      $httpBackend.expectPOST('/api/reset', {code :  '1'}).respond({status : 'Geil'});
+      resetService.listen($scope, obj.callback);
+      resetService.password('1');
+      $httpBackend.flush();
+      $scope.$apply();
+      expect(obj.callback).toHaveBeenCalledWith({status : 'Geil'});
+      expect($scope.codeData.isValid).toBe(true);
+
+    });
+    
+    it('should set isValid to false server returns errorcode', function () {  
+      var obj = {
+        callback : function(data){
+        
+        }
+      };
+      spyOn(obj, 'callback').and.callThrough();
+      $httpBackend.expectPOST('/api/reset', {code :  '1'}).respond({errorcode : 'Geil'});
+      resetService.listen($scope, obj.callback);
+      resetService.password('1');
+      $httpBackend.flush();
+      $scope.$apply();
+      expect(obj.callback).toHaveBeenCalledWith({errorcode : 'Geil'});
+      expect($scope.codeData.isValid).toBe(false);
+
+    });
     
   }); 
   
@@ -56,6 +94,7 @@ describe('App: ', function() {
  
    beforeEach(inject(function(_$injector_) {
       $httpBackend = _$injector_.get('$httpBackend');
+     
       $scope = _$injector_.get('$rootScope').$new();
       $compile = _$injector_.get('$compile');
       resetService = _$injector_.get('resetService');
@@ -146,6 +185,7 @@ describe('App: ', function() {
         isolateScope.$apply();
         expect(successElem.hasClass('active')).toEqual(true);
     });
+    
 
   }); 
 
